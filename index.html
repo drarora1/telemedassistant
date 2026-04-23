@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCC Telemedicine Assistant Training Module</title>
+<style>
+  :root {
+    --tcc-primary: #0f5e7a;
+    --tcc-secondary: #2c8aa8;
+    --tcc-accent: #e8a33d;
+    --tcc-light: #f2f7f9;
+    --tcc-border: #cfd8dc;
+    --tcc-text: #1e2a32;
+    --tcc-muted: #5a6670;
+    --tcc-success: #2e7d32;
+    --tcc-warn: #c62828;
+    --tcc-soft: #eef4f7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--tcc-text);
+    background: #ffffff;
+    margin: 0;
+    line-height: 1.55;
+  }
+  header.top {
+    background: linear-gradient(135deg, var(--tcc-primary), var(--tcc-secondary));
+    color: #fff;
+    padding: 28px 32px;
+  }
+  header.top h1 { margin: 0 0 6px 0; font-size: 26px; }
+  header.top p { margin: 0; opacity: 0.95; font-size: 15px; }
+  nav.toc {
+    background: var(--tcc-light);
+    border-bottom: 1px solid var(--tcc-border);
+    padding: 18px 32px;
+  }
+  nav.toc h2 { margin: 0 0 10px 0; font-size: 17px; color: var(--tcc-primary); }
+  nav.toc ol { margin: 0; padding-left: 22px; }
+  nav.toc li { margin: 3px 0; }
+  nav.toc a { color: var(--tcc-primary); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+  main { padding: 24px 32px 48px 32px; max-width: 1100px; margin: 0 auto; }
+  .track {
+    border: 1px solid var(--tcc-border);
+    border-radius: 10px;
+    margin: 24px 0;
+    overflow: hidden;
+  }
+  .track-head {
+    background: var(--tcc-primary);
+    color: #fff;
+    padding: 14px 20px;
+  }
+  .track-head h2 { margin: 0; font-size: 19px; }
+  .track-head .subtitle { opacity: 0.9; font-size: 13px; margin-top: 3px; }
+  .module {
+    border-top: 1px solid var(--tcc-border);
+    padding: 20px 24px;
+  }
+  .module:first-of-type { border-top: none; }
+  .module h3 { margin: 0 0 6px 0; color: var(--tcc-primary); font-size: 17px; }
+  .module .meta { color: var(--tcc-muted); font-size: 13px; margin-bottom: 10px; }
+  .module h4 {
+    margin: 16px 0 6px 0;
+    font-size: 14px;
+    color: var(--tcc-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .module ul, .module ol { padding-left: 22px; margin: 6px 0; }
+  .module li { margin: 3px 0; }
+  .callout {
+    background: var(--tcc-soft);
+    border-left: 4px solid var(--tcc-secondary);
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  .callout.warn { border-left-color: var(--tcc-warn); background: #fdecea; }
+  .callout.note { border-left-color: var(--tcc-accent); background: #fdf5e6; }
+  .sop-list {
+    background: #fafafa;
+    border: 1px solid var(--tcc-border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 8px 0;
+    font-size: 14px;
+  }
+  .sop-list a { color: var(--tcc-primary); }
+  .quiz {
+    background: #fffdf7;
+    border: 1px solid #e6d59a;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 18px 0 6px 0;
+  }
+  .quiz h4 { margin-top: 0; color: #8a6d00; }
+  .quiz .question { margin: 10px 0; }
+  .quiz .question p { margin: 0 0 6px 0; font-weight: 600; }
+  .quiz .options label {
+    display: block;
+    padding: 5px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .quiz .options label:hover { background: #fff5d6; }
+  .quiz button {
+    background: var(--tcc-primary);
+    color: #fff;
+    border: 0;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .quiz button:hover { background: var(--tcc-secondary); }
+  .quiz .result {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: none;
+  }
+  .quiz .result.pass { background: #e8f5e9; color: var(--tcc-success); display: block; }
+  .quiz .result.fail { background: #fdecea; color: var(--tcc-warn); display: block; }
+  .quiz .feedback { margin-top: 6px; font-size: 13px; }
+  .quiz .feedback.correct { color: var(--tcc-success); }
+  .quiz .feedback.incorrect { color: var(--tcc-warn); }
+  footer {
+    border-top: 1px solid var(--tcc-border);
+    padding: 20px 32px;
+    color: var(--tcc-muted);
+    font-size: 13px;
+    background: var(--tcc-light);
+  }
+  .sources { font-size: 13px; color: var(--tcc-muted); }
+  .pill {
+    display: inline-block;
+    background: var(--tcc-accent);
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .checklist li { list-style: none; position: relative; padding-left: 22px; }
+  .checklist li:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--tcc-secondary);
+    border-radius: 3px;
+  }
+  details { margin: 10px 0; }
+  summary { cursor: pointer; color: var(--tcc-primary); font-weight: 600; }
+  code { background: #eef4f7; padding: 1px 4px; border-radius: 3px; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>The Care Clinic: Telemedicine Assistant Training Module</h1>
+  <p>Structured onboarding curriculum for a staff member supporting providers during telemedicine visits. Covers virtual check-in, clinic verification, eligibility, 3-way Doxy visits, note support in Charm, checkout, recalls, and scheduling.</p>
+</header>
+
+<nav class="toc">
+  <h2>Table of contents</h2>
+  <ol>
+    <li><a href="#overview">Overview and how to use this module</a></li>
+    <li><a href="#track1">Track 1: Foundations</a>
+      <ol>
+        <li><a href="#m1">Module 1: Role Overview and The Care Clinic</a></li>
+        <li><a href="#m2">Module 2: Systems Orientation (Charm, Doxy, Phones, SharePoint)</a></li>
+      </ol>
+    </li>
+    <li><a href="#track2">Track 2: Patient Check-In and Clinic Verification</a>
+      <ol start="3">
+        <li><a href="#m3">Module 3: HIPAA Verification and Phone Answering</a></li>
+        <li><a href="#m4">Module 4: Doxy Virtual Check-In</a></li>
+        <li><a href="#m5">Module 5: Clinic Verification, Eligibility, and Chart Accuracy</a></li>
+      </ol>
+    </li>
+    <li><a href="#track3">Track 3: The Telemedicine Visit</a>
+      <ol start="6">
+        <li><a href="#m6">Module 6: 3-Way Doxy Calls and Provider Handoff</a></li>
+        <li><a href="#m7">Module 7: Real-Time Chart Support in Charm</a></li>
+        <li><a href="#m8">Module 8: Helping Finish Notes</a></li>
+      </ol>
+    </li>
+    <li><a href="#track4">Track 4: Checkout and Post-Visit</a>
+      <ol start="9">
+        <li><a href="#m9">Module 9: Checkout Workflow and Payment Handling</a></li>
+        <li><a href="#m10">Module 10: Follow-Ups and Recalls</a></li>
+        <li><a href="#m11">Module 11: UDS and Lab Orders</a></li>
+      </ol>
+    </li>
+    <li><a href="#track5">Track 5: Scheduling, Communication, and Special Cases</a>
+      <ol start="12">
+        <li><a href="#m12">Module 12: Scheduling (New, Follow-Up, On-Demand, Cancellations)</a></li>
+        <li><a href="#m13">Module 13: Medication Messages, Crisis, and Special Scripts</a></li>
+      </ol>
+    </li>
+    <li><a href="#sources">Sources and citations</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- OVERVIEW -->
+<section id="overview" class="track">
+  <div class="track-head">
+    <h2>Overview and how to use this module</h2>
+    <div class="subtitle">What this role does, how the training is organized, and the tracking format.</div>
+  </div>
+  <div class="module">
+    <h4>Who this training is for</h4>
+    <p>This module is for a new team member who supports a provider during telemedicine visits at The Care Clinic (TCC). Day-to-day responsibilities include:</p>
+    <ul>
+      <li>Virtual patient check-in via Doxy.</li>
+      <li>Clinic verification and insurance eligibility checks.</li>
+      <li>Keeping charts accurate in Charm EMR before the visit.</li>
+      <li>Joining 3-way Doxy calls with the provider and the patient.</li>
+      <li>Assisting the provider in finishing notes in Charm.</li>
+      <li>Handling checkout, including payment collection and follow-up scheduling.</li>
+      <li>Managing recalls and follow-ups.</li>
+      <li>Scheduling new and returning patients.</li>
+    </ul>
+
+    <h4>Format (matches the TCC Billing Training program)</h4>
+    <p>This curriculum mirrors the structure used in the TCC Billing Training program in ClickUp: five tracks, thirteen modules, and every module uses the same layout.</p>
+    <div class="sop-list">
+      <strong>Every module contains:</strong>
+      <ul>
+        <li>Why this module matters</li>
+        <li>Primary SOPs (with links and citations)</li>
+        <li>Prerequisites</li>
+        <li>Learning objectives</li>
+        <li>Step-by-step process</li>
+        <li>Required checks</li>
+        <li>Trainee checklist</li>
+        <li>Common errors</li>
+        <li>Practice items</li>
+        <li>A short quiz with answer validation</li>
+      </ul>
+    </div>
+
+    <div class="callout note">
+      <strong>Source transparency.</strong> Verbatim scripts and numeric rules in this module come from TCC's internal documents in SharePoint and ClickUp (see the Sources section at the bottom). Any Charm EMR or Doxy workflow that is not directly documented in those sources is labeled <em>"General platform guidance, verify locally"</em> so trainees learn to confirm details with their supervisor before assuming.
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRACK 1 ============ -->
+<section id="track1" class="track">
+  <div class="track-head">
+    <h2>Track 1: Foundations</h2>
+    <div class="subtitle">Role, clinic, and the core systems used every day.</div>
+  </div>
+
+  <!-- Module 1 -->
+  <div class="module" id="m1">
+    <h3>Module 1: Role Overview and The Care Clinic <span class="pill">~45 min</span></h3>
+    <div class="meta">Track 1 &bull; Foundations &bull; Module 1 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>The telemedicine assistant sits between the patient and the provider. Getting the first interaction right, the handoff to the provider during the visit, and the closeout after the visit are the three places where mistakes become expensive (missed charges, compliance issues, or a patient who does not return). This module establishes the scope of the role and the expected standard of care.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>TCC Doxy &amp; Phone Scripts (SharePoint, <code>TCC Doxy &amp; Phone Scripts 4_25.pdf</code>) - answering, verification, and check-in scripts.</li>
+        <li>Protocol for MAs (SharePoint, <code>Protocol for MAs.docx</code>) - see Section 3 Telemedicine Visits and Recalls/Followups.</li>
+        <li>TCC Provider Orientation (SharePoint, <code>TCC Provider Orientation (copy).pdf</code>) - context on provider workflow in Charm.</li>
+      </ul>
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Active TCC email and building access (or remote credentials).</li>
+      <li>HIPAA training completed and documented in HR.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>State the eight core responsibilities of the telemedicine assistant role.</li>
+      <li>Identify which staff member owns which part of the visit (check-in, clinical, checkout).</li>
+      <li>Explain why a clean check-in reduces errors later in billing and scheduling.</li>
+    </ol>
+
+    <h4>Step-by-step orientation</h4>
+    <ol>
+      <li>Read Sections 2 and 3 of <em>Protocol for MAs</em> (In-Person Visits and Telemedicine Visits).</li>
+      <li>Shadow one full day of telemedicine visits with an experienced assistant.</li>
+      <li>Review the TCC organizational chart with your supervisor and confirm the chain of command for clinical questions, billing questions, and scheduling questions.</li>
+    </ol>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>Confirm you know who the on-call provider is each day.</li>
+      <li>Confirm you have the correct Doxy room URL for each provider you will assist.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>HIPAA training complete.</li>
+      <li>Doxy room link saved and tested.</li>
+      <li>Charm EMR login verified.</li>
+      <li>SharePoint access to Front Desk and Provider folders verified.</li>
+      <li>Observed a full day of telemedicine visits.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Treating the role as purely clerical. Clinical attention during the visit is part of the job (for example, noticing when a patient drops off the Doxy call or when audio fails).</li>
+      <li>Skipping the shadow day. Without it, checkout and recall workflows are much harder to learn.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Draw the patient's journey from first phone call to follow-up scheduling on a whiteboard. Identify each step you own.</li>
+    </ul>
+
+    <!-- Quiz 1 -->
+    <div class="quiz" data-quiz="m1">
+      <h4>Quiz 1: Role overview</h4>
+      <div class="question" data-correct="b">
+        <p>1. Which of these is NOT a core responsibility of the telemedicine assistant?</p>
+        <div class="options">
+          <label><input type="radio" name="m1q1" value="a"> Virtual patient check-in via Doxy.</label>
+          <label><input type="radio" name="m1q1" value="b"> Writing the provider's clinical assessment.</label>
+          <label><input type="radio" name="m1q1" value="c"> Handling checkout and scheduling follow-ups.</label>
+          <label><input type="radio" name="m1q1" value="d"> Insurance eligibility checks.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="c">
+        <p>2. Why does a clean check-in matter for later steps?</p>
+        <div class="options">
+          <label><input type="radio" name="m1q2" value="a"> It shortens the provider visit.</label>
+          <label><input type="radio" name="m1q2" value="b"> It satisfies Doxy's usage policy.</label>
+          <label><input type="radio" name="m1q2" value="c"> Errors at check-in propagate into billing, scheduling, and recall workflows.</label>
+          <label><input type="radio" name="m1q2" value="d"> It is required by HIPAA.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m1')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+
+  <!-- Module 2 -->
+  <div class="module" id="m2">
+    <h3>Module 2: Systems Orientation (Charm, Doxy, Phones, SharePoint) <span class="pill">~60 min</span></h3>
+    <div class="meta">Track 1 &bull; Foundations &bull; Module 2 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>You will use four systems in parallel: Charm (EMR), Doxy.me (video visits), the TCC phone system, and SharePoint (protocols and scripts). Knowing where to find things before a patient is on the line is the difference between a smooth visit and a stressful one.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>TCC Provider Orientation (SharePoint) - Charm EMR references.</li>
+        <li>TCC Doxy &amp; Phone Scripts 4_25 (SharePoint) - phone and Doxy sections.</li>
+      </ul>
+    </div>
+    <div class="callout note">
+      <strong>General platform guidance, verify locally.</strong> Detailed click-by-click Charm and Doxy screens change between versions. This module teaches the pattern; your supervisor confirms the exact buttons on the clinic's current build.
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Module 1 complete.</li>
+      <li>Charm, Doxy, phone, and SharePoint credentials issued.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Log in to all four systems independently.</li>
+      <li>Locate a patient chart in Charm by name and by date of birth.</li>
+      <li>Open the provider's Doxy waiting room and admit a patient.</li>
+      <li>Pull up the Doxy &amp; Phone Scripts and Protocol for MAs from SharePoint in under one minute.</li>
+    </ol>
+
+    <h4>Step-by-step</h4>
+    <ol>
+      <li><strong>Charm.</strong> Log in. Confirm your dashboard shows today's scheduled patients. Open one chart and locate: demographics, insurance, medication list, problem list, last note. (<em>General platform guidance, verify locally.</em>)</li>
+      <li><strong>Doxy.</strong> Open the provider's room URL. Confirm you can see the waiting room, patient list, and chat. Practice admitting a "test" patient (a second browser on your own device).</li>
+      <li><strong>Phone.</strong> Learn the answer script verbatim: <em>"Thank you for calling The Care Clinic, my name is ____, how can I help you?"</em> (TCC Doxy &amp; Phone Scripts 4_25, Answering Call Script).</li>
+      <li><strong>SharePoint.</strong> Bookmark the Front Desk / EdApp Training Module Documents folder and the TCC Protocols folder.</li>
+    </ol>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>You can find one patient chart in Charm within 30 seconds of the patient being on the line.</li>
+      <li>You can read the answering script from memory.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>All four systems logged in from your workstation.</li>
+      <li>Bookmarks saved for Doxy room, Charm login, SharePoint protocol folders.</li>
+      <li>Answering script memorized and delivered out loud to supervisor.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Searching Charm by first name only (too many results). Always use last name plus DOB.</li>
+      <li>Leaving Doxy in a background tab and missing a waiting-room arrival.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Time yourself locating three different patient charts. Target under 30 seconds each.</li>
+      <li>Read the answer script aloud to your supervisor three times without a prompt.</li>
+    </ul>
+
+    <!-- Quiz 2 -->
+    <div class="quiz" data-quiz="m2">
+      <h4>Quiz 2: Systems orientation</h4>
+      <div class="question" data-correct="a">
+        <p>1. What is the verbatim TCC answering script for an incoming call?</p>
+        <div class="options">
+          <label><input type="radio" name="m2q1" value="a"> "Thank you for calling The Care Clinic, my name is ____, how can I help you?"</label>
+          <label><input type="radio" name="m2q1" value="b"> "Hi, this is ____ from The Care Clinic."</label>
+          <label><input type="radio" name="m2q1" value="c"> "Care Clinic front desk, who's calling?"</label>
+          <label><input type="radio" name="m2q1" value="d"> "Hello, this is the Care Clinic helpline."</label>
+        </div>
+      </div>
+      <div class="question" data-correct="b">
+        <p>2. Best practice for searching a patient in Charm:</p>
+        <div class="options">
+          <label><input type="radio" name="m2q2" value="a"> First name only.</label>
+          <label><input type="radio" name="m2q2" value="b"> Last name plus date of birth.</label>
+          <label><input type="radio" name="m2q2" value="c"> Phone number only.</label>
+          <label><input type="radio" name="m2q2" value="d"> Middle name plus city.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m2')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRACK 2 ============ -->
+<section id="track2" class="track">
+  <div class="track-head">
+    <h2>Track 2: Patient Check-In and Clinic Verification</h2>
+    <div class="subtitle">Before the provider joins: verify identity, verify the clinic, confirm insurance, clean up the chart.</div>
+  </div>
+
+  <!-- Module 3 -->
+  <div class="module" id="m3">
+    <h3>Module 3: HIPAA Verification and Phone Answering <span class="pill">~60 min</span></h3>
+    <div class="meta">Track 2 &bull; Patient Check-In and Clinic Verification &bull; Module 3 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>Every call, every check-in, and every patient interaction begins with identity verification. Releasing any protected health information without verification is a HIPAA violation. These scripts are not suggestions, they are mandatory.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>TCC Doxy &amp; Phone Scripts 4_25 (SharePoint) - <em>Answering Call Script</em>, <em>Second Call / Call Waiting Script</em>, <em>Hold Script</em>, <em>Transfer Script</em>.</li>
+        <li>HIPAA Verification_staff (SharePoint, <code>HIPAA Verification_staff.pdf</code>).</li>
+      </ul>
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Modules 1 and 2 complete.</li>
+      <li>HIPAA training on file with HR.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Recite the five-point HIPAA verification verbatim.</li>
+      <li>Handle call waiting without disclosing information to the wrong party.</li>
+      <li>Use the correct hold, return, and transfer scripts.</li>
+    </ol>
+
+    <h4>Five-point HIPAA verification (from TCC script)</h4>
+    <p>Before you share any information about the patient or their care, you must verify:</p>
+    <ol>
+      <li>Full name.</li>
+      <li>Date of birth.</li>
+      <li>Address.</li>
+      <li>Phone number.</li>
+      <li>Emergency contact.</li>
+    </ol>
+    <div class="callout warn">
+      <strong>Rule.</strong> If any of the five items do not match the chart, stop, do not release information, and follow the escalation path to your supervisor. (Source: TCC Doxy &amp; Phone Scripts 4_25, HIPAA Verification section.)
+    </div>
+
+    <h4>Key scripts (verbatim)</h4>
+    <ul>
+      <li><strong>Second call / call waiting:</strong> politely ask the first caller to hold, answer the second, get enough information to return the second caller, then go back to the first.</li>
+      <li><strong>Returning from hold:</strong> thank the caller for holding before continuing.</li>
+      <li><strong>Before transferring:</strong> tell the caller who you are transferring them to and why. (Source: TCC Doxy &amp; Phone Scripts 4_25.)</li>
+    </ul>
+
+    <h4>Step-by-step process for an incoming call</h4>
+    <ol>
+      <li>Answer with the verbatim script.</li>
+      <li>Ask for the patient's full name.</li>
+      <li>Run the five-point HIPAA check.</li>
+      <li>If verified, continue with the caller's request.</li>
+      <li>If not verified, do not share PHI. Ask them to confirm details, or escalate.</li>
+      <li>If you must put the caller on hold, use the hold script. When you return, thank them for holding.</li>
+      <li>If you transfer, use the transfer script and warm-transfer when possible.</li>
+    </ol>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>You can recite all five verification items without looking.</li>
+      <li>You know the escalation path when verification fails.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>HIPAA script memorized.</li>
+      <li>Role-played three incoming calls with the supervisor (one verified, one failed, one transfer).</li>
+      <li>Hold and transfer scripts used correctly in role play.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Confirming information the caller gives you instead of asking for it (for example, reading the DOB out loud and asking "is that right?"). The caller must provide it.</li>
+      <li>Answering call waiting with a full greeting that accidentally includes PHI of the first caller.</li>
+      <li>Forgetting to thank the caller for holding.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Role-play with your supervisor: one caller who passes verification, one who fails, one call-waiting scenario, one transfer.</li>
+    </ul>
+
+    <!-- Quiz 3 -->
+    <div class="quiz" data-quiz="m3">
+      <h4>Quiz 3: HIPAA verification</h4>
+      <div class="question" data-correct="d">
+        <p>1. The five HIPAA verification items are:</p>
+        <div class="options">
+          <label><input type="radio" name="m3q1" value="a"> Name, DOB, SSN, insurance ID, pharmacy.</label>
+          <label><input type="radio" name="m3q1" value="b"> Name, DOB, address, email, pharmacy.</label>
+          <label><input type="radio" name="m3q1" value="c"> Name, DOB, address, phone, SSN.</label>
+          <label><input type="radio" name="m3q1" value="d"> Name, DOB, address, phone, emergency contact.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="b">
+        <p>2. A caller cannot confirm their emergency contact. What do you do?</p>
+        <div class="options">
+          <label><input type="radio" name="m3q1" value="a"> Share the requested information anyway.</label>
+          <label><input type="radio" name="m3q2" value="b"> Stop, do not release PHI, and follow the escalation path.</label>
+          <label><input type="radio" name="m3q2" value="c"> Ask them to guess.</label>
+          <label><input type="radio" name="m3q2" value="d"> Update the chart with whatever they say.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m3')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+
+  <!-- Module 4 -->
+  <div class="module" id="m4">
+    <h3>Module 4: Doxy Virtual Check-In <span class="pill">~75 min</span></h3>
+    <div class="meta">Track 2 &bull; Patient Check-In and Clinic Verification &bull; Module 4 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>You are the first person a telemedicine patient sees. The Doxy check-in is where we run HIPAA verification, confirm the patient's physical location, confirm updated personal and insurance info, and enforce the 15-minute early window.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>TCC Doxy &amp; Phone Scripts 4_25 (SharePoint) - <em>Check-in Script for Scheduled Patients</em> and related sections on privacy and location.</li>
+        <li>Protocol for MAs (SharePoint) - Section 3 Telemedicine Visits.</li>
+      </ul>
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Modules 1 through 3 complete.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Run the full Doxy check-in script without prompts.</li>
+      <li>Confirm the patient is physically located in a state where the provider is licensed.</li>
+      <li>Capture any address, pharmacy, or insurance changes accurately.</li>
+      <li>Enforce the 15-minute early arrival rule consistently.</li>
+    </ol>
+
+    <h4>Step-by-step check-in (from TCC script)</h4>
+    <ol>
+      <li>Greet the patient in the Doxy room with the standard greeting.</li>
+      <li>Run the five-point HIPAA verification (Module 3).</li>
+      <li>Confirm the patient's current physical location, specifically the state. Document it.</li>
+      <li>Ask about changes since the last visit: address, pharmacy, insurance.</li>
+      <li>Confirm the patient is in a quiet, private location suitable for a medical visit.</li>
+      <li>Remind the patient that the clinic expects check-in up to 15 minutes early. If they are more than late, follow the late-cancellation rules (Module 9).</li>
+      <li>Update the chart in Charm with any changes before the provider joins.</li>
+    </ol>
+    <div class="callout note">
+      <strong>Source.</strong> Location, changes-since-last-visit, privacy, and the 15-minute early window are all codified in <em>TCC Doxy &amp; Phone Scripts 4_25, Check-in Script for Scheduled Patients</em>.
+    </div>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>Patient's physical location (state) is documented in the visit note.</li>
+      <li>Pharmacy, address, and insurance reviewed and corrected if needed.</li>
+      <li>Patient is in a private location. If not, offer to reschedule.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>Location-in-state confirmed.</li>
+      <li>Pharmacy on file matches what patient reports.</li>
+      <li>Insurance card on file (front and back) still current.</li>
+      <li>Emergency contact still current.</li>
+      <li>Quiet, private location confirmed.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Assuming the patient is in their home state. Patients travel.</li>
+      <li>Accepting "nothing has changed" without asking each item.</li>
+      <li>Admitting the patient to the provider before updating the chart.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Role-play a check-in where the patient has moved to another state. Decide whether the provider can see them today.</li>
+      <li>Role-play a check-in where the patient is in a crowded coffee shop.</li>
+    </ul>
+
+    <!-- Quiz 4 -->
+    <div class="quiz" data-quiz="m4">
+      <h4>Quiz 4: Doxy check-in</h4>
+      <div class="question" data-correct="c">
+        <p>1. Why do we document the patient's physical state at every telemedicine check-in?</p>
+        <div class="options">
+          <label><input type="radio" name="m4q1" value="a"> To confirm their home address is up to date.</label>
+          <label><input type="radio" name="m4q1" value="b"> To mail them prescriptions.</label>
+          <label><input type="radio" name="m4q1" value="c"> Because the provider must be licensed in the state where the patient is physically located.</label>
+          <label><input type="radio" name="m4q1" value="d"> For Doxy's billing system.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="b">
+        <p>2. The TCC check-in script instructs the assistant to ask about changes to:</p>
+        <div class="options">
+          <label><input type="radio" name="m4q2" value="a"> Only insurance.</label>
+          <label><input type="radio" name="m4q2" value="b"> Address, pharmacy, and insurance.</label>
+          <label><input type="radio" name="m4q2" value="c"> Only pharmacy.</label>
+          <label><input type="radio" name="m4q2" value="d"> Nothing, the patient volunteers changes.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="a">
+        <p>3. The standard early-arrival window for check-in is:</p>
+        <div class="options">
+          <label><input type="radio" name="m4q3" value="a"> Up to 15 minutes before the appointment.</label>
+          <label><input type="radio" name="m4q3" value="b"> Up to 1 hour before.</label>
+          <label><input type="radio" name="m4q3" value="c"> Exactly at the appointment time only.</label>
+          <label><input type="radio" name="m4q3" value="d"> Up to 5 minutes before.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m4')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+
+  <!-- Module 5 -->
+  <div class="module" id="m5">
+    <h3>Module 5: Clinic Verification, Eligibility, and Chart Accuracy <span class="pill">~90 min</span></h3>
+    <div class="meta">Track 2 &bull; Patient Check-In and Clinic Verification &bull; Module 5 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>"Clinic verification" means confirming that TCC is the correct clinic for this visit (right provider, right license state, right services) and that the patient's insurance will cover the visit. Skipping this creates denied claims, mid-visit disruption, and unhappy patients.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>ClickUp "TCC Billing SOP" document - <em>Clinic Verification and Chart Setup</em> module (used as the format template for this role's verification workflow).</li>
+        <li>ClickUp SOPs: <em>Clinic Verification</em>, <em>Verifying Clinic</em>, <em>Creating New Chart</em>, <em>Phone + Fax</em> (verify current URLs with your supervisor).</li>
+        <li>Protocol for MAs (SharePoint) - Section 3 Telemedicine Visits.</li>
+      </ul>
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Modules 1 through 4 complete.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Perform a pre-visit clinic verification for a scheduled telemedicine patient.</li>
+      <li>Run an eligibility check for the patient's insurance.</li>
+      <li>Update Charm chart fields (demographics, insurance, pharmacy, emergency contact) accurately before the provider joins.</li>
+      <li>Recognize when a visit must be rescheduled for out-of-state or coverage reasons.</li>
+    </ol>
+
+    <h4>Step-by-step</h4>
+    <ol>
+      <li><strong>Confirm the provider-patient pairing.</strong> Right provider, right license state for today's physical location.</li>
+      <li><strong>Confirm the service.</strong> Telemedicine visit type matches what is on the schedule.</li>
+      <li><strong>Eligibility check.</strong> Run the payer's eligibility check. Confirm coverage is active and the plan covers telemedicine for today's service. (<em>General platform guidance, verify the exact tool used in Charm/clearinghouse with your supervisor.</em>)</li>
+      <li><strong>Chart cleanup.</strong> In Charm, verify and update: demographics, insurance (primary and secondary), pharmacy, allergies, current medications, emergency contact, problem list, last note. (<em>General platform guidance, verify locally.</em>)</li>
+      <li><strong>Flag issues early.</strong> If eligibility fails, follow the self-pay script (Module 9) or reschedule.</li>
+    </ol>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>Insurance active today, for this plan, for telemedicine.</li>
+      <li>Patient's physical state matches provider's license.</li>
+      <li>Pharmacy and emergency contact verified this visit.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>Eligibility response saved to the chart or accessible for billing.</li>
+      <li>Copay or self-pay amount known before the provider joins.</li>
+      <li>Any chart corrections made and saved.</li>
+      <li>Any red flags communicated to the provider in the Doxy chat or a Charm message before the visit starts.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Running eligibility on the secondary only and missing primary termination.</li>
+      <li>Assuming the patient's insurance covers telemedicine. Some plans do not.</li>
+      <li>Skipping chart cleanup because "the provider will fix it." They often will not.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Walk through a live pre-visit verification for two patients with your supervisor observing.</li>
+      <li>Find and read the ClickUp "Creating New Chart" SOP and explain the steps back.</li>
+    </ul>
+
+    <!-- Quiz 5 -->
+    <div class="quiz" data-quiz="m5">
+      <h4>Quiz 5: Clinic verification and eligibility</h4>
+      <div class="question" data-correct="c">
+        <p>1. Which pairing must be confirmed before a telemedicine visit begins?</p>
+        <div class="options">
+          <label><input type="radio" name="m5q1" value="a"> Patient's pharmacy matches the provider's pharmacy.</label>
+          <label><input type="radio" name="m5q1" value="b"> Patient's email matches their insurance email.</label>
+          <label><input type="radio" name="m5q1" value="c"> Provider is licensed in the state where the patient is physically located today.</label>
+          <label><input type="radio" name="m5q1" value="d"> Provider's pharmacy is a preferred pharmacy.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="b">
+        <p>2. Insurance eligibility runs clean but the plan excludes telemedicine. Correct action:</p>
+        <div class="options">
+          <label><input type="radio" name="m5q2" value="a"> Proceed and let billing sort it out.</label>
+          <label><input type="radio" name="m5q2" value="b"> Offer self-pay per TCC script, or reschedule in person.</label>
+          <label><input type="radio" name="m5q2" value="c"> Waive the fee.</label>
+          <label><input type="radio" name="m5q2" value="d"> Switch the patient to a different provider without telling them.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m5')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRACK 3 ============ -->
+<section id="track3" class="track">
+  <div class="track-head">
+    <h2>Track 3: The Telemedicine Visit</h2>
+    <div class="subtitle">Joining the call, supporting the provider in real time, and helping wrap the note.</div>
+  </div>
+
+  <!-- Module 6 -->
+  <div class="module" id="m6">
+    <h3>Module 6: 3-Way Doxy Calls and Provider Handoff <span class="pill">~60 min</span></h3>
+    <div class="meta">Track 3 &bull; The Telemedicine Visit &bull; Module 6 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>Once you have completed check-in, you either transfer the patient to the provider or join the provider in a 3-way Doxy call. The handoff must be seamless and the patient should never feel handed off twice.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>TCC Doxy &amp; Phone Scripts 4_25 (SharePoint) - <em>Transfer Script</em>, <em>Unscheduled Doxy Login Script</em>.</li>
+        <li>Protocol for MAs (SharePoint) - Section 3 Telemedicine Visits.</li>
+      </ul>
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Modules 1 through 5 complete.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Execute a scheduled transfer using the verbatim transfer script.</li>
+      <li>Join a 3-way Doxy call without disrupting the visit.</li>
+      <li>Handle an unscheduled patient who logs in to Doxy using the correct script.</li>
+    </ol>
+
+    <h4>Step-by-step</h4>
+    <ol>
+      <li>Finish check-in tasks from Module 4 and 5.</li>
+      <li>Tell the patient you are now going to bring in the provider or transfer them. Use the transfer script.</li>
+      <li>In Doxy, move the patient to the provider's room or invite the provider into your room, per clinic setup.</li>
+      <li>If you are staying on a 3-way call, mute yourself unless addressed or typing in Charm.</li>
+      <li>Drop off the call only when the provider indicates you can, and confirm you will return for checkout.</li>
+    </ol>
+
+    <h4>Unscheduled Doxy login</h4>
+    <p>Unscheduled patients who log into Doxy follow a specific script. Use it verbatim. Do not ignore the waiting room. (Source: TCC Doxy &amp; Phone Scripts 4_25, Unscheduled Doxy Login Script.)</p>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>Provider is aware of any issues found in check-in (chart, insurance, location, mood).</li>
+      <li>Patient knows what to expect next.</li>
+      <li>If unscheduled: the on-demand fee has been addressed before the provider joins (see Module 12).</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>Transfer script delivered word for word in at least one observed visit.</li>
+      <li>3-way Doxy mechanics observed with an experienced assistant.</li>
+      <li>Unscheduled login script memorized.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Silent handoff. The patient does not know you are leaving and the provider does not know the patient is incoming.</li>
+      <li>Forgetting to mute on a 3-way call.</li>
+      <li>Chatting in Doxy during the clinical portion of the visit.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Observe three handoffs with an experienced assistant.</li>
+      <li>Complete one handoff yourself with the supervisor shadowing.</li>
+    </ul>
+
+    <!-- Quiz 6 -->
+    <div class="quiz" data-quiz="m6">
+      <h4>Quiz 6: Handoff and 3-way calls</h4>
+      <div class="question" data-correct="c">
+        <p>1. A patient logs in to Doxy without an appointment. You should:</p>
+        <div class="options">
+          <label><input type="radio" name="m6q1" value="a"> Ignore them and let Doxy time out.</label>
+          <label><input type="radio" name="m6q1" value="b"> Immediately add them to the provider's next slot.</label>
+          <label><input type="radio" name="m6q1" value="c"> Use the Unscheduled Doxy Login Script in the TCC Doxy &amp; Phone Scripts.</label>
+          <label><input type="radio" name="m6q1" value="d"> Ask the provider to interrupt the current visit.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="b">
+        <p>2. On a 3-way Doxy call, your default behavior is:</p>
+        <div class="options">
+          <label><input type="radio" name="m6q2" value="a"> Speak whenever you have a thought.</label>
+          <label><input type="radio" name="m6q2" value="b"> Mute yourself unless addressed or narrating a chart update.</label>
+          <label><input type="radio" name="m6q2" value="c"> Leave the call.</label>
+          <label><input type="radio" name="m6q2" value="d"> Record the conversation for your own notes.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m6')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+
+  <!-- Module 7 -->
+  <div class="module" id="m7">
+    <h3>Module 7: Real-Time Chart Support in Charm <span class="pill">~75 min</span></h3>
+    <div class="meta">Track 3 &bull; The Telemedicine Visit &bull; Module 7 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>During the visit, the provider is focused on the patient. You are focused on the chart. You should document vitals if reported, medication changes, allergy changes, and any administrative items the provider calls out, so that finishing the note after the visit takes minutes, not hours.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>Protocol for MAs (SharePoint) - Section 3 Telemedicine Visits.</li>
+        <li>TCC Provider Orientation (SharePoint) - Charm EMR tutorial references.</li>
+      </ul>
+    </div>
+    <div class="callout note">
+      <strong>General platform guidance, verify locally.</strong> Charm's note templates and macro fields differ between provider accounts. The items below are the expected <em>content</em>, not the exact click path.
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Modules 1 through 6 complete.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Type into Charm without disrupting the visit flow.</li>
+      <li>Capture medication and allergy updates the moment the provider discusses them.</li>
+      <li>Know what the provider will finish themselves (assessment, plan, prescriptions) versus what you will finish (demographics, pharmacy, follow-up date).</li>
+    </ol>
+
+    <h4>Step-by-step during the visit</h4>
+    <ol>
+      <li>Keep the patient's chart open and on the correct visit note.</li>
+      <li>Document any verbal updates the patient gives about medications, allergies, pharmacy, or contact information.</li>
+      <li>When the provider verbalizes next steps (labs, UDS, follow-up window), record them so checkout is fast.</li>
+      <li>Do not document clinical assessment language or diagnoses. That is the provider's job.</li>
+    </ol>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>Medication list reflects changes confirmed during the visit.</li>
+      <li>Pharmacy on file matches what the patient wants prescriptions sent to.</li>
+      <li>Any labs or UDS the provider ordered are listed for you to send at checkout.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>Can type into Charm without looking at the keyboard.</li>
+      <li>Knows the scope: administrative and patient-reported data, not clinical opinion.</li>
+      <li>Has a system (a scratchpad or Charm messaging) for flagging items to the provider.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Writing clinical language that should come from the provider.</li>
+      <li>Waiting until after the visit to capture updates. Details get lost.</li>
+      <li>Correcting the patient mid-visit. Note it and raise it with the provider.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Shadow a provider for three visits. After each, list what you documented in real time.</li>
+    </ul>
+
+    <!-- Quiz 7 -->
+    <div class="quiz" data-quiz="m7">
+      <h4>Quiz 7: Real-time chart support</h4>
+      <div class="question" data-correct="d">
+        <p>1. Which of the following is in your scope to document during a visit?</p>
+        <div class="options">
+          <label><input type="radio" name="m7q1" value="a"> The diagnosis.</label>
+          <label><input type="radio" name="m7q1" value="b"> The clinical assessment.</label>
+          <label><input type="radio" name="m7q1" value="c"> A new prescription.</label>
+          <label><input type="radio" name="m7q1" value="d"> Patient-reported medication changes and pharmacy updates.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="b">
+        <p>2. You notice the patient's pharmacy in Charm does not match what they just said. You should:</p>
+        <div class="options">
+          <label><input type="radio" name="m7q2" value="a"> Say nothing until after the visit.</label>
+          <label><input type="radio" name="m7q2" value="b"> Note it, confirm the preferred pharmacy with the patient, and update the chart.</label>
+          <label><input type="radio" name="m7q2" value="c"> Override the provider's prescription.</label>
+          <label><input type="radio" name="m7q2" value="d"> Close the chart.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m7')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+
+  <!-- Module 8 -->
+  <div class="module" id="m8">
+    <h3>Module 8: Helping Finish Notes <span class="pill">~45 min</span></h3>
+    <div class="meta">Track 3 &bull; The Telemedicine Visit &bull; Module 8 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>After the clinical portion ends, the provider may delegate administrative note-finishing tasks: setting the follow-up interval, ordering a UDS or lab, routing a referral, attaching a form. Doing this while the visit is fresh keeps charts clean and billing-ready.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>Protocol for MAs (SharePoint) - Recalls/Followups section.</li>
+        <li>TCC Doxy &amp; Phone Scripts 4_25 (SharePoint) - UDS/Lab orders section.</li>
+      </ul>
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Modules 1 through 7 complete.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Identify which note fields the assistant may complete.</li>
+      <li>Transcribe the provider's follow-up interval into a recall.</li>
+      <li>Send UDS home kit orders or lab orders per the correct window.</li>
+    </ol>
+
+    <h4>Step-by-step</h4>
+    <ol>
+      <li>After the provider signs off clinically, ask: "Anything to finish on the chart while the patient is still here?"</li>
+      <li>Set the recall window the provider named (Module 10).</li>
+      <li>If the provider ordered labs, send the order within the correct window (see Module 11: lab within 7 days; UDS home kit 2-week window).</li>
+      <li>Route any referrals or forms.</li>
+      <li>Move to the checkout script (Module 9).</li>
+    </ol>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>Recall date is set in Charm.</li>
+      <li>Orders are routed or queued.</li>
+      <li>Provider has what they need to sign the note.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>Recalls entered on time.</li>
+      <li>Orders sent within the correct window.</li>
+      <li>No notes closed without checkout complete.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Closing a note before checkout is done.</li>
+      <li>Missing the 7-day lab window and letting the order lapse.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Complete three assistant-side note closeouts with supervisor review.</li>
+    </ul>
+
+    <!-- Quiz 8 -->
+    <div class="quiz" data-quiz="m8">
+      <h4>Quiz 8: Helping finish notes</h4>
+      <div class="question" data-correct="b">
+        <p>1. The provider orders labs at the end of a visit. What is the window to send the order?</p>
+        <div class="options">
+          <label><input type="radio" name="m8q1" value="a"> 30 days.</label>
+          <label><input type="radio" name="m8q1" value="b"> 7 days.</label>
+          <label><input type="radio" name="m8q1" value="c"> 24 hours.</label>
+          <label><input type="radio" name="m8q1" value="d"> Anytime.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="a">
+        <p>2. The provider orders a UDS home kit. What is the window?</p>
+        <div class="options">
+          <label><input type="radio" name="m8q2" value="a"> 2 weeks.</label>
+          <label><input type="radio" name="m8q2" value="b"> 48 hours.</label>
+          <label><input type="radio" name="m8q2" value="c"> 30 days.</label>
+          <label><input type="radio" name="m8q2" value="d"> 3 days.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m8')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRACK 4 ============ -->
+<section id="track4" class="track">
+  <div class="track-head">
+    <h2>Track 4: Checkout and Post-Visit</h2>
+    <div class="subtitle">Payments, feedback, follow-up, recalls, and lab orders.</div>
+  </div>
+
+  <!-- Module 9 -->
+  <div class="module" id="m9">
+    <h3>Module 9: Checkout Workflow and Payment Handling <span class="pill">~75 min</span></h3>
+    <div class="meta">Track 4 &bull; Checkout and Post-Visit &bull; Module 9 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>Checkout is where we collect payment, gather patient feedback, and book the follow-up. If you miss a payment here, recovering it later is painful. If you miss scheduling, the recall loop breaks.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>TCC Doxy &amp; Phone Scripts 4_25 (SharePoint) - <em>Payment Scripts</em> (Insurance-S, Self-Pay copay, Insurance-A / Alma hold), <em>Check-out Script</em>.</li>
+      </ul>
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Modules 1 through 8 complete.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Identify which payment script applies based on the patient's coverage.</li>
+      <li>Deliver the full checkout script including feedback, follow-up scheduling, and cancellation policy.</li>
+      <li>Explain the $50 late cancellation fee correctly.</li>
+    </ol>
+
+    <h4>Which payment script to use</h4>
+    <ul>
+      <li><strong>Insurance-S (Standard) / Self-Pay copay.</strong> Copay collected at checkout.</li>
+      <li><strong>Insurance-A / Alma hold.</strong> Authorization hold script, not a direct collection.</li>
+    </ul>
+    <p>Use the script for the category the patient is in. Do not improvise. (Source: TCC Doxy &amp; Phone Scripts 4_25, Payment Scripts.)</p>
+
+    <h4>Step-by-step checkout</h4>
+    <ol>
+      <li>Thank the patient and confirm the visit is over.</li>
+      <li>Run the appropriate payment script.</li>
+      <li>Ask for feedback on the visit.</li>
+      <li>Schedule the follow-up using the recall date the provider set (Module 10).</li>
+      <li>Remind the patient of the $50 late cancellation fee, per the TCC check-out script.</li>
+      <li>Confirm contact preferences for appointment reminders.</li>
+      <li>Close the chart administrative fields so the provider can sign.</li>
+    </ol>
+
+    <div class="callout warn">
+      <strong>Verbatim rule.</strong> The $50 late cancellation fee is stated in the TCC Doxy &amp; Phone Scripts. Deliver the script word for word; do not soften it, and do not waive the fee without supervisor approval.
+    </div>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>Payment captured or Alma-style hold placed.</li>
+      <li>Follow-up scheduled on the recall date.</li>
+      <li>Cancellation fee explained out loud.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>Knows the three payment scripts and when each applies.</li>
+      <li>Delivered a full checkout in role play without prompts.</li>
+      <li>Can state the $50 late cancellation fee without hedging.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Dropping feedback and cancellation fee from the script.</li>
+      <li>Mixing Alma-hold language with Self-Pay copay language.</li>
+      <li>Booking the follow-up outside the provider's recall window.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Run three role-play checkouts covering: Self-Pay copay, Insurance-S with copay, Insurance-A / Alma hold.</li>
+    </ul>
+
+    <!-- Quiz 9 -->
+    <div class="quiz" data-quiz="m9">
+      <h4>Quiz 9: Checkout and payment</h4>
+      <div class="question" data-correct="c">
+        <p>1. The TCC late cancellation fee is:</p>
+        <div class="options">
+          <label><input type="radio" name="m9q1" value="a"> $10.</label>
+          <label><input type="radio" name="m9q1" value="b"> $25.</label>
+          <label><input type="radio" name="m9q1" value="c"> $50.</label>
+          <label><input type="radio" name="m9q1" value="d"> $100.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="b">
+        <p>2. A patient is an Alma/Insurance-A patient. At checkout you:</p>
+        <div class="options">
+          <label><input type="radio" name="m9q2" value="a"> Collect a $50 copay directly.</label>
+          <label><input type="radio" name="m9q2" value="b"> Run the Insurance-A / Alma hold script.</label>
+          <label><input type="radio" name="m9q2" value="c"> Skip payment entirely.</label>
+          <label><input type="radio" name="m9q2" value="d"> Ask for cash.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m9')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+
+  <!-- Module 10 -->
+  <div class="module" id="m10">
+    <h3>Module 10: Follow-Ups and Recalls <span class="pill">~60 min</span></h3>
+    <div class="meta">Track 4 &bull; Checkout and Post-Visit &bull; Module 10 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>A recall is the clinic's promise that a patient will come back at the right clinical interval. When recalls are missed, continuity of care suffers, prescriptions lapse, and revenue is lost. This is one of the most visible measures of the telemedicine assistant's performance.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>Protocol for MAs (SharePoint) - Recalls/Followups section.</li>
+        <li>TCC Doxy &amp; Phone Scripts 4_25 (SharePoint) - Check-out Script.</li>
+      </ul>
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Modules 1 through 9 complete.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Translate the provider's spoken follow-up interval ("see me in 4 weeks") into a recall date in Charm.</li>
+      <li>Run a weekly recall audit to catch upcoming follow-ups and past-due patients.</li>
+      <li>Follow the outreach cadence your supervisor sets for past-due recalls.</li>
+    </ol>
+
+    <h4>Step-by-step</h4>
+    <ol>
+      <li>At checkout, confirm the recall interval from the provider (for example, 2, 4, 6, or 12 weeks).</li>
+      <li>Create the recall in Charm with the correct date.</li>
+      <li>Attempt to schedule the follow-up now. If the patient cannot commit, send them options by their preferred contact method.</li>
+      <li>Weekly, pull the recall report and act on upcoming and past-due items per the Protocol for MAs.</li>
+    </ol>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>Recall exists in Charm for every telemedicine visit you closed this week.</li>
+      <li>No recall is more than 30 days past-due without an outreach attempt logged.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>Recalls scheduled at checkout for every visit.</li>
+      <li>Weekly recall audit completed and documented.</li>
+      <li>Outreach logged for past-due patients.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Typing a recall without a date.</li>
+      <li>Skipping the weekly audit.</li>
+      <li>Scheduling the follow-up outside the provider's interval because "that's the first open slot."</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Run a recall audit with supervisor oversight on your second week.</li>
+    </ul>
+
+    <!-- Quiz 10 -->
+    <div class="quiz" data-quiz="m10">
+      <h4>Quiz 10: Follow-ups and recalls</h4>
+      <div class="question" data-correct="b">
+        <p>1. When is the best time to book the patient's follow-up?</p>
+        <div class="options">
+          <label><input type="radio" name="m10q1" value="a"> Whenever the patient remembers to call.</label>
+          <label><input type="radio" name="m10q1" value="b"> At checkout, during the same visit.</label>
+          <label><input type="radio" name="m10q1" value="c"> A week after the visit.</label>
+          <label><input type="radio" name="m10q1" value="d"> Only if the patient asks.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="c">
+        <p>2. A recall exists in Charm but the patient has not been contacted for 45 days. You should:</p>
+        <div class="options">
+          <label><input type="radio" name="m10q2" value="a"> Delete the recall.</label>
+          <label><input type="radio" name="m10q2" value="b"> Ignore it.</label>
+          <label><input type="radio" name="m10q2" value="c"> Run outreach per the Protocol for MAs and log the attempt.</label>
+          <label><input type="radio" name="m10q2" value="d"> Bill the patient $50.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m10')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+
+  <!-- Module 11 -->
+  <div class="module" id="m11">
+    <h3>Module 11: UDS and Lab Orders <span class="pill">~45 min</span></h3>
+    <div class="meta">Track 4 &bull; Checkout and Post-Visit &bull; Module 11 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>Orders have tight time windows and the windows are documented in the TCC scripts. Missing a window means the patient has to repeat a conversation, the order must be reissued, and care is delayed.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>TCC Doxy &amp; Phone Scripts 4_25 (SharePoint) - <em>UDS/Lab Orders</em> section.</li>
+        <li>Protocol for MAs (SharePoint) - UDS/Lab Order section.</li>
+      </ul>
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Modules 1 through 10 complete.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Explain and enforce the 2-week window for UDS home kit orders.</li>
+      <li>Explain and enforce the 7-day window for lab orders.</li>
+      <li>Use the correct patient-facing script when delivering lab or UDS instructions.</li>
+    </ol>
+
+    <h4>Step-by-step</h4>
+    <ol>
+      <li>When the provider orders a UDS home kit, send it and communicate to the patient that they have 2 weeks to complete it.</li>
+      <li>When the provider orders labs, send the order and tell the patient they have 7 days to complete it.</li>
+      <li>Document the order and window in Charm.</li>
+      <li>Follow up with any patient who misses a window.</li>
+    </ol>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>Patient can state back the window before hanging up.</li>
+      <li>Order is visible in the chart.</li>
+      <li>Follow-up outreach is scheduled if the window lapses.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>Knows 7-day lab window.</li>
+      <li>Knows 2-week UDS home kit window.</li>
+      <li>Can deliver the patient-facing instructions word for word.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Assuming the patient will remember the window. They often will not.</li>
+      <li>Sending the order but not telling the patient.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Role-play three order-delivery scripts: UDS home kit, in-lab labs, and a patient who cannot leave the house.</li>
+    </ul>
+
+    <!-- Quiz 11 -->
+    <div class="quiz" data-quiz="m11">
+      <h4>Quiz 11: UDS and lab orders</h4>
+      <div class="question" data-correct="b">
+        <p>1. UDS home kit window:</p>
+        <div class="options">
+          <label><input type="radio" name="m11q1" value="a"> 7 days.</label>
+          <label><input type="radio" name="m11q1" value="b"> 2 weeks.</label>
+          <label><input type="radio" name="m11q1" value="c"> 48 hours.</label>
+          <label><input type="radio" name="m11q1" value="d"> 30 days.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="c">
+        <p>2. Lab order window:</p>
+        <div class="options">
+          <label><input type="radio" name="m11q2" value="a"> 2 weeks.</label>
+          <label><input type="radio" name="m11q2" value="b"> 30 days.</label>
+          <label><input type="radio" name="m11q2" value="c"> 7 days.</label>
+          <label><input type="radio" name="m11q2" value="d"> 24 hours.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m11')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRACK 5 ============ -->
+<section id="track5" class="track">
+  <div class="track-head">
+    <h2>Track 5: Scheduling, Communication, and Special Cases</h2>
+    <div class="subtitle">New and returning patients, on-demand requests, cancellations, medication messages, crisis scripts.</div>
+  </div>
+
+  <!-- Module 12 -->
+  <div class="module" id="m12">
+    <h3>Module 12: Scheduling (New, Follow-Up, On-Demand, Cancellations) <span class="pill">~75 min</span></h3>
+    <div class="meta">Track 5 &bull; Scheduling, Communication, and Special Cases &bull; Module 12 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>Scheduling is where mistakes in earlier steps become visible. A bad eligibility check shows up as a denied claim. A missed recall shows up as a no-show. Great scheduling makes the rest of the clinic function.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>TCC Doxy &amp; Phone Scripts 4_25 (SharePoint) - <em>On-demand script</em>, <em>Check-in script</em> for scheduled patients, <em>Check-out script</em>.</li>
+        <li>Protocol for MAs (SharePoint) - Section 3 Telemedicine Visits.</li>
+      </ul>
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Modules 1 through 11 complete.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Schedule a new patient correctly, including intake and insurance on file.</li>
+      <li>Schedule a follow-up at the provider's recall interval.</li>
+      <li>Apply the $25 on-demand fee correctly.</li>
+      <li>Apply the $50 late cancellation fee correctly.</li>
+    </ol>
+
+    <h4>Step-by-step: new patient</h4>
+    <ol>
+      <li>Capture full name, DOB, address, phone, emergency contact, pharmacy.</li>
+      <li>Confirm physical location and state.</li>
+      <li>Capture insurance (front and back of card) and run eligibility.</li>
+      <li>Pair patient with a provider licensed in that state.</li>
+      <li>Book the intake/telemedicine slot.</li>
+      <li>Send any pre-visit paperwork.</li>
+    </ol>
+
+    <h4>Step-by-step: follow-up</h4>
+    <ol>
+      <li>Use the recall date set at the last visit.</li>
+      <li>Offer at least two time options within the recall window.</li>
+      <li>Book in Charm and confirm the reminder channel.</li>
+    </ol>
+
+    <h4>Step-by-step: on-demand</h4>
+    <ol>
+      <li>Use the on-demand script verbatim.</li>
+      <li>Collect the $25 on-demand fee before the provider joins. (Source: TCC Doxy &amp; Phone Scripts 4_25.)</li>
+      <li>Run abbreviated check-in.</li>
+    </ol>
+
+    <h4>Step-by-step: cancellations</h4>
+    <ol>
+      <li>Offer reschedule first.</li>
+      <li>If the cancellation is within the late window, apply the $50 late cancellation fee per the TCC script.</li>
+      <li>Document the cancellation reason.</li>
+    </ol>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>No visit is booked without eligibility or self-pay path.</li>
+      <li>No visit is booked to a provider who is not licensed in the patient's physical state.</li>
+      <li>Fees are applied per script, not per patient preference.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>Completed one new patient schedule with supervisor oversight.</li>
+      <li>Completed one follow-up schedule.</li>
+      <li>Completed one on-demand intake with $25 fee collected.</li>
+      <li>Completed one cancellation with $50 fee applied per script.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Booking a telemedicine visit for a patient traveling in a non-license state without flagging it.</li>
+      <li>Waiving the $25 or $50 fee without supervisor approval.</li>
+      <li>Scheduling outside the provider's recall window.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Role-play four scenarios: new patient, returning follow-up, on-demand, late cancellation.</li>
+    </ul>
+
+    <!-- Quiz 12 -->
+    <div class="quiz" data-quiz="m12">
+      <h4>Quiz 12: Scheduling</h4>
+      <div class="question" data-correct="a">
+        <p>1. The TCC on-demand fee is:</p>
+        <div class="options">
+          <label><input type="radio" name="m12q1" value="a"> $25.</label>
+          <label><input type="radio" name="m12q1" value="b"> $50.</label>
+          <label><input type="radio" name="m12q1" value="c"> $100.</label>
+          <label><input type="radio" name="m12q1" value="d"> $0.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="b">
+        <p>2. A new telemedicine patient tells you they are traveling in a state where the provider is not licensed. You should:</p>
+        <div class="options">
+          <label><input type="radio" name="m12q2" value="a"> Book the visit anyway.</label>
+          <label><input type="radio" name="m12q2" value="b"> Explain why the visit cannot occur today and reschedule or offer a provider who is licensed there if available.</label>
+          <label><input type="radio" name="m12q2" value="c"> Ignore the state.</label>
+          <label><input type="radio" name="m12q2" value="d"> Tell the patient to say they are in their home state.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="c">
+        <p>3. The TCC late cancellation fee is:</p>
+        <div class="options">
+          <label><input type="radio" name="m12q3" value="a"> $10.</label>
+          <label><input type="radio" name="m12q3" value="b"> $25.</label>
+          <label><input type="radio" name="m12q3" value="c"> $50.</label>
+          <label><input type="radio" name="m12q3" value="d"> $100.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m12')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+
+  <!-- Module 13 -->
+  <div class="module" id="m13">
+    <h3>Module 13: Medication Messages, Crisis, and Special Scripts <span class="pill">~60 min</span></h3>
+    <div class="meta">Track 5 &bull; Scheduling, Communication, and Special Cases &bull; Module 13 of 13</div>
+
+    <h4>Why this module matters</h4>
+    <p>Two kinds of calls need care beyond the standard scripts: medication messages and crisis calls. The TCC scripts set both the language and the escalation expectations. A zero-tolerance policy applies to harassment.</p>
+
+    <h4>Primary SOPs</h4>
+    <div class="sop-list">
+      <ul>
+        <li>TCC Doxy &amp; Phone Scripts 4_25 (SharePoint) - <em>Medication message scripts</em>, <em>Crisis resources</em>, <em>Zero-tolerance harassment policy</em>.</li>
+      </ul>
+    </div>
+
+    <h4>Prerequisites</h4>
+    <ul>
+      <li>Modules 1 through 12 complete.</li>
+    </ul>
+
+    <h4>Learning objectives</h4>
+    <ol>
+      <li>Deliver medication message scripts verbatim.</li>
+      <li>Recognize a crisis call and provide the correct resources (988 and Text "HELLO" to 741741).</li>
+      <li>Apply the zero-tolerance policy consistently and escalate correctly.</li>
+    </ol>
+
+    <h4>Crisis resources (verbatim)</h4>
+    <ul>
+      <li><strong>988 Suicide and Crisis Lifeline.</strong> Dial or text 988.</li>
+      <li><strong>Crisis Text Line.</strong> Text "HELLO" to 741741.</li>
+    </ul>
+    <p>(Source: TCC Doxy &amp; Phone Scripts 4_25, Crisis resources.)</p>
+    <div class="callout warn">
+      <strong>Rule.</strong> If a patient is in immediate danger, do not disconnect. Stay with them, connect them to 988, and escalate to the provider or supervisor immediately.
+    </div>
+
+    <h4>Medication messages</h4>
+    <p>Follow the TCC medication message scripts for refills, questions, and side-effect reports. Do not give clinical advice. Route to the provider. (Source: TCC Doxy &amp; Phone Scripts 4_25, Medication message scripts.)</p>
+
+    <h4>Zero-tolerance harassment policy</h4>
+    <p>TCC has a zero-tolerance policy for harassment. You may and should disengage and escalate per the script if a patient or caller is abusive. (Source: TCC Doxy &amp; Phone Scripts 4_25.)</p>
+
+    <h4>Step-by-step for a potential crisis call</h4>
+    <ol>
+      <li>Stay calm. Acknowledge the patient.</li>
+      <li>Ask directly if they are safe right now.</li>
+      <li>Provide 988 and 741741 resources verbatim.</li>
+      <li>Do not end the call; bring in the provider or supervisor.</li>
+      <li>Document the call thoroughly in Charm.</li>
+    </ol>
+
+    <h4>Required checks</h4>
+    <ul>
+      <li>You know the two crisis resources by memory.</li>
+      <li>You know how to escalate in real time to a provider or supervisor.</li>
+      <li>You know how to disengage per the zero-tolerance policy.</li>
+    </ul>
+
+    <h4>Trainee checklist</h4>
+    <ul class="checklist">
+      <li>988 and 741741 resources memorized.</li>
+      <li>Role-played a crisis call with supervisor.</li>
+      <li>Role-played a zero-tolerance escalation.</li>
+    </ul>
+
+    <h4>Common errors</h4>
+    <ul>
+      <li>Giving clinical advice during a medication message.</li>
+      <li>Hanging up on an abusive caller without escalation.</li>
+      <li>Providing crisis resources inconsistently.</li>
+    </ul>
+
+    <h4>Practice items</h4>
+    <ul>
+      <li>Three role-plays: refill question, crisis disclosure, abusive caller.</li>
+    </ul>
+
+    <!-- Quiz 13 -->
+    <div class="quiz" data-quiz="m13">
+      <h4>Quiz 13: Crisis, medication, and special scripts</h4>
+      <div class="question" data-correct="a">
+        <p>1. The TCC-referenced crisis resources are:</p>
+        <div class="options">
+          <label><input type="radio" name="m13q1" value="a"> 988 Suicide and Crisis Lifeline; Text "HELLO" to 741741.</label>
+          <label><input type="radio" name="m13q1" value="b"> 911 only.</label>
+          <label><input type="radio" name="m13q1" value="c"> Text "CARE" to 123456.</label>
+          <label><input type="radio" name="m13q1" value="d"> Call the on-call provider only.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="c">
+        <p>2. A patient calls with a medication question. You should:</p>
+        <div class="options">
+          <label><input type="radio" name="m13q2" value="a"> Answer from your own knowledge.</label>
+          <label><input type="radio" name="m13q2" value="b"> Refuse to take the message.</label>
+          <label><input type="radio" name="m13q2" value="c"> Use the TCC medication message script and route to the provider.</label>
+          <label><input type="radio" name="m13q2" value="d"> Tell them to go to urgent care.</label>
+        </div>
+      </div>
+      <div class="question" data-correct="b">
+        <p>3. A caller becomes abusive. Under the zero-tolerance policy you:</p>
+        <div class="options">
+          <label><input type="radio" name="m13q3" value="a"> Argue back to defend yourself.</label>
+          <label><input type="radio" name="m13q3" value="b"> Disengage per the script and escalate to your supervisor.</label>
+          <label><input type="radio" name="m13q3" value="c"> Continue the call to make them happy.</label>
+          <label><input type="radio" name="m13q3" value="d"> Transfer them to another patient.</label>
+        </div>
+      </div>
+      <button onclick="gradeQuiz('m13')">Check answers</button>
+      <div class="result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOURCES -->
+<section id="sources" class="track">
+  <div class="track-head">
+    <h2>Sources and citations</h2>
+    <div class="subtitle">Every numeric rule and verbatim script in this module is traceable to one of these documents.</div>
+  </div>
+  <div class="module">
+    <h4>SharePoint documents (verified in this build)</h4>
+    <ul class="sources">
+      <li><strong>TCC Doxy &amp; Phone Scripts 4_25.pdf</strong> - Front Desk / EdApp Training Module Documents. Provides the verbatim scripts for answering, HIPAA verification, call waiting, hold, transfer, check-in, payment (Insurance-S, Self-Pay copay, Insurance-A / Alma hold), check-out, UDS / Lab orders (2-week and 7-day windows), quiet/private location requirement, on-demand ($25), medication messages, crisis resources (988 / Text "HELLO" to 741741), and zero-tolerance harassment policy, and the $50 late cancellation fee.</li>
+      <li><strong>Protocol for MAs.docx</strong> - Front Desk folder. Section 2 In-Person Visits, Section 3 Telemedicine Visits, Recalls/Followups, UDS/Lab Order, Follow-up, Section 7 Referral Sources.</li>
+      <li><strong>HIPAA Verification_staff.pdf</strong> - HiringShared / HR / TCC HR Policies.</li>
+      <li><strong>TCC Provider Orientation (copy).pdf</strong> - Provider site / TCC Protocols. Charm EMR orientation references.</li>
+    </ul>
+
+    <h4>ClickUp documents (verified in this build)</h4>
+    <ul class="sources">
+      <li><strong>TCC Billing - SOP</strong> (document_id <code>8ca0vd2-2411</code>). This telemedicine assistant module follows the same 5-Track / 13-Module format as the Billing Training Program page (<code>8ca0vd2-26391</code>) and uses the <em>Clinic Verification and Chart Setup</em> page (<code>8ca0vd2-26411</code>) as the per-module layout template.</li>
+      <li>Referenced ClickUp SOPs (paths may evolve, confirm with supervisor): Clinic Verification, Verifying Clinic, Creating New Chart, Phone + Fax.</li>
+    </ul>
+
+    <h4>Labeled uncertainty</h4>
+    <p>Anywhere Charm EMR or Doxy click paths are described at the field level, this module uses "<em>General platform guidance, verify locally</em>" because those interfaces change between builds. All numeric rules and verbatim scripts are tied to the TCC Doxy &amp; Phone Scripts 4_25 document above.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Prepared for The Care Clinic. Internal training use only. For corrections or updates, contact the training owner in the Front Desk SharePoint site.
+</footer>
+
+<script>
+function gradeQuiz(quizId) {
+  const quiz = document.querySelector('.quiz[data-quiz="' + quizId + '"]');
+  if (!quiz) return;
+  const questions = quiz.querySelectorAll('.question');
+  let total = questions.length;
+  let correct = 0;
+  questions.forEach(function(q, idx) {
+    const correctAnswer = q.getAttribute('data-correct');
+    const selected = q.querySelector('input[type="radio"]:checked');
+    let fb = q.querySelector('.feedback');
+    if (!fb) {
+      fb = document.createElement('div');
+      fb.className = 'feedback';
+      q.appendChild(fb);
+    }
+    if (selected && selected.value === correctAnswer) {
+      correct += 1;
+      fb.textContent = 'Correct.';
+      fb.className = 'feedback correct';
+    } else if (selected) {
+      fb.textContent = 'Not quite. Correct answer: ' + correctAnswer.toUpperCase() + '.';
+      fb.className = 'feedback incorrect';
+    } else {
+      fb.textContent = 'No answer selected. Correct answer: ' + correctAnswer.toUpperCase() + '.';
+      fb.className = 'feedback incorrect';
+    }
+  });
+  const result = quiz.querySelector('.result');
+  result.textContent = 'Score: ' + correct + ' / ' + total;
+  result.className = 'result ' + (correct === total ? 'pass' : 'fail');
+}
+</script>
+
+</body>
+</html>
